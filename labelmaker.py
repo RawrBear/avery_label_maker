@@ -9,33 +9,42 @@ doc = DocxTemplate("template.docx")
 # Sets the main context to be an empty dictionary
 main_context = {}
 
+# Is used to track the sheets.
+# It logs every time the save function is called and sets that as the sheet number
 counter = 0
 
-
-# TODO Test with bigger dataset
-# TODO Change dataset to fake data before making git repo
-# TODO Make git repo
+# Used to store the index of the current row
+# This is used in process method
+personIndex = 0
 
 
 class Person:
-    def __init__(self, name, address, city, state, zip, index):
+    def __init__(self, name, address, city, state, zip):
         self.name = name
         self.address = address
         self.city = city
         self.state = state
         self.zip = zip
 
-# Call the function to process the data
-        self.process(index)
+        global personIndex
+        personIndex += 1
+        print("personIndex is: ", personIndex)
 
-    def process(self, index):
+        if personIndex == 21:
+            # Reset personIndex for the next sheet of labels
+            personIndex = 0
+
+# Call the function to process the data
+        self.process(personIndex)
+
+    def process(self, personIndex):
         #  Write the context
         context = {
-            "name" + str(index): self.name,
-            "address" + str(index): self.address,
-            "city" + str(index): self.city,
-            "state" + str(index): self.state,
-            "zip" + str(index): self.zip
+            "name" + str(personIndex): self.name,
+            "address" + str(personIndex): self.address,
+            "city" + str(personIndex): self.city,
+            "state" + str(personIndex): self.state,
+            "zip" + str(personIndex): self.zip
         }
         # Push the context to the main_context
         main_context.update(context)
@@ -45,7 +54,10 @@ class Person:
         global counter
         counter = counter + 1
         print("Counter is:", counter)
+
+        doc.render(main_context)
         doc.save("sheet"+str(counter)+".docx")
+
         print("SHEET SAVED")
         main_context.clear()
 
@@ -59,15 +71,15 @@ datasetLen = len(df.index)
 
 #  Loop through dataframe
 for index, row in df.iterrows():
-    print("Index is: ", index)
+    # print("Index is: ", index)
 
-    # Check if we hit every 20 in the dataset
+    # Check when hit every 20 in the dataset
     if index + 1 in range(0, datasetLen, 20):
         print("In Range: ", index + 1)
 
         # # Send data to the class
         person = Person(row["NAME"], row["ADDRESS"],
-                        row["CITY"], row["STATE"], row["ZIP"], index)
+                        row["CITY"], row["STATE"], row["ZIP"])
         doc.render(main_context)
         Person.saveFile()
         #  Print the done message
@@ -77,13 +89,13 @@ for index, row in df.iterrows():
 
 # Send data to the class
     person = Person(row["NAME"], row["ADDRESS"],
-                    row["CITY"], row["STATE"], row["ZIP"], index)
+                    row["CITY"], row["STATE"], row["ZIP"])
 
     # Check if we are at the end of the dataset
     if index + 1 >= datasetLen:
         # Send data to the class
         person = Person(row["NAME"], row["ADDRESS"],
-                        row["CITY"], row["STATE"], row["ZIP"], index)
+                        row["CITY"], row["STATE"], row["ZIP"])
         doc.render(main_context)
         Person.saveFile()
 #  Print the done message
