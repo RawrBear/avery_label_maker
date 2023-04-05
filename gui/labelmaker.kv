@@ -37,17 +37,17 @@
     auto_dismiss: False
     size_hint: 0.7, 0.7
     pos_hint: {'x':0.1 , 'top': 0.9} 
-    title: "Please Select Your File"
+    title: "Processing..."
 
     BoxLayout:
         padding: 50
         spaceing: 50
-
         orientation: 'vertical'
         size: root.width, root.height
-        FileChooserIconView:
-            id: dataListChooser
-            on_selection: dataListPopup.dataListSelected(dataListChooser.selection)
+      
+        TextInput:
+            id: feedback
+            multiline: True
 
         Button:
             size_hint_y: 0
