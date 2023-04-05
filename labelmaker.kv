@@ -1,7 +1,7 @@
 #: import Factory kivy.factory.Factory
 
 <MainGrid>
-    
+
     dataList: dataList
     outputDir: outputDir
 
@@ -29,29 +29,11 @@
                 multiline: False
 
         Button:
-            text: "Submit"
+            text: "Process..."
             on_press: root.btnGo()
-
-<FileSelectPopup@Popup>
-    id: dataListPopup
-    auto_dismiss: False
-    size_hint: 0.7, 0.7
-    pos_hint: {'x':0.1 , 'top': 0.9} 
-    title: "Processing..."
-
-    BoxLayout:
-        padding: 50
-        spaceing: 50
-        orientation: 'vertical'
-        size: root.width, root.height
-      
+        
         TextInput:
-            id: feedback
+            id: outputConsole
             multiline: True
-
-        Button:
-            size_hint_y: 0
-            height: 50
-            text: "Cancel"
             font_size: 24
-            on_release: root.dismiss()
+            text: "TEST"

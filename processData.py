@@ -49,14 +49,18 @@ class Person:
         # Push the context to the main_context
         main_context.update(context)
 
-# Save the file
-    def saveFile():
+# Save the sheet
+    def saveFile(self, outputFolder):
         global counter
         counter = counter + 1
         print("Counter is:", counter)
 
         doc.render(main_context)
-        doc.save("sheet"+str(counter)+".docx")
-
+        fileName = "sheet" + str(counter) + ".docx"
+        fileSaveLocation = outputFolder + "/" + fileName
+        print(fileSaveLocation)
+        doc.save(fileSaveLocation)
+        print("SELF IS:", self)
+        self.ids.outputConsole.text = "Sheet Saved" + "\n"
         print("SHEET SAVED")
         main_context.clear()
