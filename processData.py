@@ -30,12 +30,12 @@ class Person:
         personIndex += 1
         print("personIndex is: ", personIndex)
 
-        if personIndex == 21:
-            # Reset personIndex for the next sheet of labels
-            personIndex = 0
-
 # Call the function to process the data
         self.process(personIndex)
+
+        if personIndex >= 20:
+            # Reset personIndex for the next sheet of labels
+            personIndex = 0
 
     def process(self, personIndex):
         #  Write the context
