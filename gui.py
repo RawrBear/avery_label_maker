@@ -3,14 +3,15 @@ from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from plyer import filechooser
 from main import runProcess
+import global_
 
 # TODO: Fire the popup and the runProcess functions from the PROCESS button
 
 
 class MainGrid(Widget):
-    dataList = ObjectProperty(None)
-    outputDir = ObjectProperty(None)
-    outputConsole = ObjectProperty(None)
+    # dataList = ObjectProperty(None)
+    # outputDir = ObjectProperty(None)
+    # outputConsole = ObjectProperty(None)
 
     listPath = ""
     outputPath = ""
@@ -29,6 +30,9 @@ class MainGrid(Widget):
 
         print("OUTPUTPATH: ", self.outputPath[0])
         runProcess(self, self.listPath, self.outputPath)
+
+    def updateConsole(self):
+        self.ids.outputConsole.text = global_.message
 
 
 class LabelMaker(App):

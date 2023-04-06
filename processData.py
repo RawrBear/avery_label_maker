@@ -1,5 +1,5 @@
 from docxtpl import DocxTemplate
-
+import global_
 
 import time as time
 
@@ -61,6 +61,7 @@ class Person:
         print(fileSaveLocation)
         doc.save(fileSaveLocation)
         print("SELF IS:", self)
-        self.ids.outputConsole.text = "Sheet Saved" + "\n"
+        global_.message = fileName + " has been saved. \n\n"
+        print("GLOBAL IS: ", global_.message)
         print("SHEET SAVED")
         main_context.clear()
