@@ -1,7 +1,6 @@
 from docxtpl import DocxTemplate
-
-
 import time as time
+import global_
 
 # Opens the template file
 doc = DocxTemplate("template.docx")
@@ -30,11 +29,11 @@ class Person:
         personIndex += 1
         print("personIndex is: ", personIndex)
 
-# Call the function to process the data
+        # Call the function to process the data
         self.process(personIndex)
 
+        # Reset personIndex for the next sheet of labels
         if personIndex >= 20:
-            # Reset personIndex for the next sheet of labels
             personIndex = 0
 
     def process(self, personIndex):
@@ -60,7 +59,9 @@ class Person:
         fileSaveLocation = outputFolder + "/" + fileName
         print(fileSaveLocation)
         doc.save(fileSaveLocation)
-        print("SELF IS:", self)
-        self.ids.outputConsole.text = "Sheet Saved" + "\n"
+        print("CONSOLE IS:", self.ids.outputConsole.text)
+        # self.ids.outputConsole.text = "Sheet Saved" + "\n"
         print("SHEET SAVED")
         main_context.clear()
+        global_.message = "Sheet" + str(counter) + " Saved"
+        print("GLOBAL MESSAGE IS: ", global_.message)
