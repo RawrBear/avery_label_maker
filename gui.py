@@ -1,27 +1,19 @@
-import pandas as pd
-import time as time
-from docxtpl import DocxTemplate
 from kivy.clock import Clock
-import threading
-import global_
-from main import runProcess
 from kivy.app import App
 from kivy.uix.widget import Widget
+from docxtpl import DocxTemplate
 from kivy.properties import ObjectProperty
 from plyer import filechooser
-
-import threading
-from kivy.clock import Clock
-import global_
-from docxtpl import DocxTemplate
-import time as time
-import global_
 import pandas as pd
+import time as time
+import threading
+import global_
 
 # TODO: make PROCESS button only available when the process isn't running
 # TODO: Fix styling
 # TODO: Error handling: The input boxes shouldn't crash the pogram when there's no input or the user clicks out of the selection screen
 # TODO: Split the code
+# TODO: Improve and refactor this crappy code
 
 
 def thread(function):
