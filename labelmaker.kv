@@ -31,10 +31,9 @@
 
         Button:
             text: "Process..."
-            on_press: root.btnGo()
-        
+            on_press: root.btnGo(), root.start_console_thread()
+
         TextInput:
             id: outputConsole
             multiline: True
             font_size: 24
-            text: "TEST"
