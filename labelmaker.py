@@ -3,12 +3,25 @@ import ttkbootstrap as ttk
 from refact import runProcess
 import global_
 from plyer import filechooser
+from threading import *
 
 #### GUI ####
 
+# Set up processing function on a second thread
+
+
+def process_threading():
+    # Call work function
+    t1 = Thread(target=runProcess)
+    t1.start()
+
+# THIS NEEDS TO BE TRIGGERED ON A TIMER
+
 
 def message_to_console():
-    console_output_string.set(global_.message + "\n")
+    # console_output_string.set(global_.message)
+    console_output_label.config(text=global_.message)
+    console_output_label.after(1000, message_to_console)
 
 
 def open_data_file():
@@ -23,7 +36,8 @@ def open_data_file():
     list_file_path.set(listPath[0])
 
     # Update the console output
-    message_to_console("Excel File Selected")
+    global_.message = "Excel File Selected"
+    message_to_console()
 
 
 def open_save_location():
@@ -38,7 +52,7 @@ def open_save_location():
     save_location_path.set(outputPath[0])
 
     # Update the console output
-    message_to_console("Save Location Selected")
+    global_.message = "Output Folder Selected"
 
 
 # Window
@@ -76,18 +90,14 @@ save_location_button.pack(side='left')
 
 
 # Process Button
-process_button = ttk.Button(window, text="Process", command=runProcess)
+process_button = ttk.Button(window, text="Process", command=process_threading)
 
 # Pack
-
 process_button.pack(pady=10)
 
-
 # Console Output
-console_output_string = ttk.StringVar()
-console_output_label = ttk.Label(window, text="Output",
-                                 font="Calibri 20", textvariable=console_output_string)
-console_output_label.pack()
+console_output_label = ttk.Label(window, text="Output", font=("Calibri", 20))
+console_output_label.pack(pady=20,)
 
 # RUN
 window.mainloop()

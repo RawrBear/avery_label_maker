@@ -1,6 +1,7 @@
 import pandas as pd
 import global_
 from docxtpl import DocxTemplate
+import time
 
 # Open the template file
 doc = DocxTemplate("template2.docx")
@@ -27,6 +28,9 @@ def saveFile():
     # global_.message = "Sheet" + str(global_.counter) + " Saved"
     global_.main_context.clear()
     print("SAVED")
+
+    # Send message to console
+    global_.message = "Sheet" + str(global_.counter) + " Saved"
 
 
 def pushContext(row):
@@ -84,3 +88,4 @@ def runProcess():
             print("END OF DATAFRAME")
             # pushContext(row)
             saveFile()
+            global_.message = "No more data"
