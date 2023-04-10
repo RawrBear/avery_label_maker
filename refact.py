@@ -1,0 +1,80 @@
+import pandas as pd
+import global_
+from docxtpl import DocxTemplate
+
+# Open the template file
+doc = DocxTemplate("template2.docx")
+# Save data
+
+
+def saveFile():
+
+    global_.counter = global_.counter + 1
+    # print("global_.counter is:", global_.counter)
+    # print(global_.save_location)
+    # print("MAIN CONTEXT IS: ", global_.main_context, end="\n\n")
+    doc.render(global_.main_context)
+    fileName = "sheet" + str(global_.counter) + ".docx"
+    fileSaveLocation = global_.save_location + "/" + fileName
+    # print(fileSaveLocation)
+    doc.save(fileSaveLocation)
+    # print("SHEET SAVED")
+    global_.message = "Sheet" + str(global_.counter) + " Saved"
+    global_.main_context.clear()
+
+
+def pushContext(row):
+
+    #  Write the context
+    context = {
+        "name" + str(global_.personIndex): row["NAME"],
+        "address" + str(global_.personIndex): row["ADDRESS"],
+        "city" + str(global_.personIndex): row["CITY"],
+        "state" + str(global_.personIndex): row["STATE"],
+        "zip" + str(global_.personIndex): row["ZIP"]
+    }
+
+    # Push the context to the main_context
+    global_.main_context.update(context)
+    # print("GOBAL CONTEXT IS: ", global_.main_context)
+    print(global_.personIndex)
+    global_.personIndex = global_.personIndex + 1
+
+
+def runProcess():
+
+    ### VARS ###
+
+    # Open excel file
+    excelFile = global_.list_location
+
+    # Set the dataframe
+    df = pd.read_excel(excelFile, usecols=[
+        "NAME", "ADDRESS", "CITY", "STATE", "ZIP"])
+
+    # Get the length of the dataset
+    datasetLen = len(df.index)
+
+    # loop through it. It starts at index 0 but row 2 of the sheet by default
+    for index, row in df.iterrows():
+
+        pushContext(row)
+
+        '''
+        When you hit 20, save the context.
+        These numbers are important! You need -1 as the start because the index starts at 0. 
+        The second is the dataset length.
+        Last is the step. This needs to be 20 because of the -1. 
+        '''
+        if index in range(-1, datasetLen, 20):
+            print("20 HIT. Name is: ", row["NAME"])
+            pushContext(row)
+            saveFile()
+            # Reset the counter
+            global_.personIndex = 0
+
+# TODO: Add another if statement for when we reach the end of the dataframe
+        if index + 1 >= datasetLen:
+            print("END OF DATAFRAME")
+            # pushContext(row)
+            saveFile()

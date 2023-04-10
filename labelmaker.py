@@ -1,225 +1,93 @@
-
-from docxtpl import DocxTemplate
-
-from plyer import filechooser
-import pandas as pd
-import time as time
-import threading
+import tkinter as tk
+import ttkbootstrap as ttk
+from refact import runProcess
 import global_
+from plyer import filechooser
+
+#### GUI ####
 
 
-# TODO: Remove all KIVY crap and replace with CTkinter
-# TODO: Fix styling
-# TODO: Split the code
-# TODO: Improve and refactor this crappy code
+def message_to_console():
+    console_output_string.set(global_.message + "\n")
 
 
-def thread(function):
-    def wrap(*args, **kwargs):
-        t = threading.Thread(target=function, args=args,
-                             kwargs=kwargs, daemon=True)
-        t.start()
+def open_data_file():
+    # Open filechooser
+    listPath = filechooser.open_file(
+        title="Choose your list..", filters=[("Excel", "*.xlsx")])
 
-        return t
-    return wrap
+    # Update the global variable
+    global_.list_location = listPath[0]
 
+    # Update the textbox variable
+    list_file_path.set(listPath[0])
 
-class MainGrid():
-
-    listPath = ""
-    outputPath = ""
-    processing = False
-
-    def updateConsole(self, *kwargs):
-        self.ids.outputConsole.text = global_.message
-
-        print("UPDATECONSOLE SAYS: ", global_.message)
-
-    def btnOpenFile(self):
-        self.listPath = filechooser.open_file(title="Choose your list..", filters=[
-            ("Excel", "*.xlsx")])
-        try:
-            self.ids.dataList.text = self.listPath[0]
-
-        except:
-
-            self.ids.outputConsole.text = "Please Choose A File..."
-            print("ERROR: CLICKED OUT OF THE SELECTED FILE")
-
-    def btnSaveFile(self):
-        self.outputPath = filechooser.choose_dir(title="Where do you want to save the output?", filters=[
-            ("All Files", "*.*")])
-
-        try:
-            self.ids.outputDir.text = self.outputPath[0]
-        except:
-            self.ids.outputConsole.text = "Please Choose A Directory..."
-            print(self.outputPath)
-            print("ERROR: CLICKED OUT OF THE SELECTED DIRECTORY")
-
-    def start_console_thread(self):
-        print("Start console thread")
-        threading.Thread(target=self.console_thread).start()
-
-    def console_thread(self):
-        print("Console thread running")
-        self.console_clock = Clock.schedule_interval(self.updateConsole, 0.4)
-
-    def stop_console_clock(self):
-        self.console_clock.cancel()
-
-    def btnGo(self):
-        # if listpath and outputpath are not empty
-        if self.listPath != "" and self.outputPath != "":
-            runProcess(self, self.listPath, self.outputPath)
-            self.processing == True
-            global_.message = "Processing..."
-        else:
-            self.ids.outputConsole.text = "Please select a list and output directory"
+    # Update the console output
+    message_to_console("Excel File Selected")
 
 
-# Opens the template file
-doc = DocxTemplate("template.docx")
+def open_save_location():
+    # Open filechooser
+    outputPath = filechooser.choose_dir(title="Where to save the output?", filters=[
+        ("All Files", "*.*")])
 
-# Sets the main context to be an empty dictionary
-main_context = {}
+    # Update the global variable
+    global_.save_location = outputPath[0]
 
+    # Update the textbox variable
+    save_location_path.set(outputPath[0])
 
-# Used to store the index of the current row
-# This is used in process method
-personIndex = 0
-
-
-class Person:
-    # global_.global_.counter = 0
-    # Is used to track the sheets.
-    # It logs every time the save function is called and sets that as the sheet number
-    def __init__(self, name, address, city, state, zip):
-        self.name = name
-        self.address = address
-        self.city = city
-        self.state = state
-        self.zip = zip
-
-        global personIndex
-        personIndex += 1
-        print("personIndex is: ", personIndex)
-
-        # Call the function to process the data
-        self.process(personIndex)
-
-        # Reset personIndex for the next sheet of labels
-        if personIndex >= 20:
-            personIndex = 0
-
-    def process(self, personIndex):
-        #  Write the context
-        context = {
-            "name" + str(personIndex): self.name,
-            "address" + str(personIndex): self.address,
-            "city" + str(personIndex): self.city,
-            "state" + str(personIndex): self.state,
-            "zip" + str(personIndex): self.zip
-        }
-        # Push the context to the main_context
-        main_context.update(context)
-
-# Save the sheet
-    def saveFile(self, outputFolder):
-        global_.counter
-        global_.counter = global_.counter + 1
-        print("global_.counter is:", global_.counter)
-
-        doc.render(main_context)
-        fileName = "sheet" + str(global_.counter) + ".docx"
-        fileSaveLocation = outputFolder + "/" + fileName
-        print(fileSaveLocation)
-        doc.save(fileSaveLocation)
-        print("SHEET SAVED")
-        main_context.clear()
-        global_.message = "Sheet" + str(global_.counter) + " Saved"
+    # Update the console output
+    message_to_console("Save Location Selected")
 
 
-@ thread
-def runProcess(self, excelFile, outputFolder):
+# Window
+window = ttk.Window(themename='darkly')
+window.title("Hello World")
+window.geometry("600x400")
 
-    # get dataframe from excel file
-    try:
-        excelFile = excelFile[0]
-    except IndexError:
-        print("No excel file selected")
+# Title
+title_label = ttk.Label(
+    window, text="Awesome Label Maker", font=("Calibri", 24))
+title_label.pack()
 
-    try:
-        outputFolder = outputFolder[0]
-    except IndexError:
-        print("No output folder selected")
-
-    # Handle pandas error if the excel file is empty or has the wrong column names
-    try:
-        try:
-            df = pd.read_excel(excelFile, usecols=[
-                "NAME", "ADDRESS", "CITY", "STATE", "ZIP"])
-            # df.columns returns a list of column names
-            # loops thrrough each and check for True. 'name' in df
-
-            # Get length of dataframe
-            datasetLen = len(df.index)
-        except:
-            print("ERROR: Column names do not match")
-
-        #  Loop through dataframe
-        for index, row in df.iterrows():
-            # print("Index is: ", index)
-
-            # Check when hit every 20 in the dataset
-            if index + 1 in range(0, datasetLen, 20):
-                print("In Range: ", index + 1)
-
-                # # Send data to the class
-                person = Person(row["NAME"], row["ADDRESS"],
-                                row["CITY"], row["STATE"], row["ZIP"])
-                doc.render(main_context)
-                Person.saveFile(self, outputFolder)
-                #  Print the done message
-                print("DONE WITH PAGE")
-                time.sleep(3)
-                continue
-
-        # Send data to the class
-            person = Person(row["NAME"], row["ADDRESS"],
-                            row["CITY"], row["STATE"], row["ZIP"])
-
-            # Check if we are at the end of the dataset
-            if index + 1 >= datasetLen:
-                # Send data to the class
-                person = Person(row["NAME"], row["ADDRESS"],
-                                row["CITY"], row["STATE"], row["ZIP"])
-                doc.render(main_context)
-                Person.saveFile(self, outputFolder)
-        #  Print the done message
-                print("DONE")
-                global_.message = "Processing finished."
-                MainGrid.processing = False
-                global_.counter = 0
-                time.sleep(5)
-                MainGrid.stop_console_clock(self)
-                break
-    except:
-        print("ERROR")
+# Open Date File
+open_data_frame = ttk.Frame(window)
+list_file_path = ttk.StringVar()
+list_file_entry = ttk.Entry(
+    open_data_frame, width=30, textvariable=list_file_path)
+data_file_button = ttk.Button(open_data_frame, text="Open List...",
+                              command=open_data_file)
+list_file_entry.pack(side='right', padx=10)
+data_file_button.pack(side='left')
+open_data_frame.pack(pady=10)
 
 
-class LabelMaker(App):
-    def build(self):
-        self.icon = 'label.png'
-        self.title = 'Awesome Label Processor!'
+# Open Output Folder
+open_save_frame = ttk.Frame(window)
+save_location_path = ttk.StringVar()
+save_location_entry = ttk.Entry(open_save_frame, width=30,
+                                textvariable=save_location_path)
+save_location_button = ttk.Button(open_save_frame, text="Save Location...",
+                                  command=open_save_location)
+open_save_frame.pack(pady=10)
+save_location_entry.pack(side='right', padx=10)
+save_location_button.pack(side='left')
 
-        return MainGrid()
+
+# Process Button
+process_button = ttk.Button(window, text="Process", command=runProcess)
+
+# Pack
+
+process_button.pack(pady=10)
 
 
-# processDataThread = threading.Thread(target=runProcess)
-# updateConsoleThread = threading.Thread(target=MainGrid.updateConsole)
-if __name__ == '__main__':
-    LabelMaker().run()
+# Console Output
+console_output_string = ttk.StringVar()
+console_output_label = ttk.Label(window, text="Output",
+                                 font="Calibri 20", textvariable=console_output_string)
+console_output_label.pack()
 
-    # processDataThread.start()
-    # threading.Thread(target=LabelMaker.run())
+# RUN
+window.mainloop()

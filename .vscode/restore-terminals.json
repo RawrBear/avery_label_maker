@@ -1,0 +1,16 @@
+{
+  "artificialDelayMilliseconds": 700,
+  "keepExistingTerminalsOpen": false,
+  "runOnStartup": true,
+  "terminals": [
+    {
+        "name": "Python",
+          "commands": [".venv/Scripts/activate"]
+        },
+        {
+          "name": "Git"
+          
+        }
+       
+  ]
+}
