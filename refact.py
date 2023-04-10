@@ -9,18 +9,24 @@ doc = DocxTemplate("template2.docx")
 
 def saveFile():
 
+    # +1 the global counter
     global_.counter = global_.counter + 1
-    # print("global_.counter is:", global_.counter)
-    # print(global_.save_location)
-    # print("MAIN CONTEXT IS: ", global_.main_context, end="\n\n")
+
+    # put data from main_context into template
     doc.render(global_.main_context)
+
+    # Sset the file name
     fileName = "sheet" + str(global_.counter) + ".docx"
+
+    # Set the save location
     fileSaveLocation = global_.save_location + "/" + fileName
-    # print(fileSaveLocation)
+
+    # Save the file
     doc.save(fileSaveLocation)
-    # print("SHEET SAVED")
-    global_.message = "Sheet" + str(global_.counter) + " Saved"
+
+    # global_.message = "Sheet" + str(global_.counter) + " Saved"
     global_.main_context.clear()
+    print("SAVED")
 
 
 def pushContext(row):
@@ -29,7 +35,7 @@ def pushContext(row):
     context = {
         "name" + str(global_.personIndex): row["NAME"],
         "address" + str(global_.personIndex): row["ADDRESS"],
-        "city" + str(global_.personIndex): row["CITY"],
+        "city" + str(global_.personIndex): row["CITY"] + ",",
         "state" + str(global_.personIndex): row["STATE"],
         "zip" + str(global_.personIndex): row["ZIP"]
     }
