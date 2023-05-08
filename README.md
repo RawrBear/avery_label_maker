@@ -19,5 +19,4 @@ If running from the command line:
 The program is set to create a new file for every 20 people in you dataset. This is for easier printing as Word sometimes screws up the formatting if you add more pages to the template. 
 
 **TODO**
-* Add a GUI
 * Create cross-platform executables 
