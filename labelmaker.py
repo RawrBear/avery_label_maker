@@ -2,8 +2,9 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from refact import runProcess
 import global_
-from plyer import filechooser
 from threading import *
+from tkinter import filedialog as fd
+
 
 #### GUI ####
 
@@ -16,9 +17,6 @@ def process_threading():
     t1.start()
 
 
-# THIS NEEDS TO BE TRIGGERED ON A TIMER
-
-
 def message_to_console():
     # console_output_string.set(global_.message)
     console_output_label.config(text=global_.message)
@@ -27,8 +25,12 @@ def message_to_console():
 
 def open_data_file():
     # Open filechooser
-    listPath = filechooser.open_file(
-        title="Choose your list..", filters=[("Excel", "*.xlsx")]
+    # listPath = filechooser.open_file(
+    #     title="Choose your list..", filters=[("Excel", "*.xlsx")]
+    listPath = fd.askopenfilenames(
+        title="Choose your list..",
+        initialdir="/",
+        filetypes=[("Excel", "*.xlsx")],
     )
 
     # Update the global variable
@@ -44,16 +46,22 @@ def open_data_file():
 
 def open_save_location():
     # Open filechooser
-    outputPath = filechooser.choose_dir(
-        title="Where to save the output?", filters=[("All Files", "*.*")]
+    # outputPath = filechooser.choose_dir(
+    #     title="Where to save the output?", filters=[("All Files", "*.*")]
+    # )
+    outputPath = fd.askdirectory(
+        title="Where to save the output?",
+        initialdir="/"
+        # filetypes=[("All Files", "*.*")]
+        # initialdir="/"
     )
-    print(outputPath[0])
+    print(outputPath)
 
     # Update the global variable
-    global_.save_location = outputPath[0]
+    global_.save_location = outputPath
 
     # Update the textbox variable
-    save_location_path.set(outputPath[0])
+    save_location_path.set(outputPath)
 
     # Update the console output
     global_.message = "Output Folder Selected"
