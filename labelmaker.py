@@ -1,6 +1,6 @@
 import tkinter as tk
 import ttkbootstrap as ttk
-from refact import runProcess
+from utils import runProcess
 import global_
 from threading import *
 from tkinter import filedialog as fd

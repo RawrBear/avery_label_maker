@@ -2,8 +2,6 @@ import pandas as pd
 import global_
 from docxtpl import DocxTemplate
 
-# TODO: There is a problem opening the excel sheet from outside of the exe dir. Find a fix
-
 # Open the template file
 doc = DocxTemplate("template2.docx")
 # Save data
@@ -81,9 +79,16 @@ def runProcess():
             # Reset the counter
             global_.personIndex = 0
 
-        # TODO: Add another if statement for when we reach the end of the dataframe
         if index + 1 >= datasetLen:
             print("END OF DATAFRAME")
             # pushContext(row)
             saveFile()
             global_.message = "No more data"
+            clearCounters()
+
+
+# This clears the counters to "reset" the program. You can now process a new list without restarting the program
+def clearCounters():
+    global_.counter = 0
+    global_.personIndex = 0
+    global_.main_context.clear()
