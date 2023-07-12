@@ -1,9 +1,17 @@
 import pandas as pd
 import global_
 from docxtpl import DocxTemplate
+import sys
 
 # Open the template file
-doc = DocxTemplate("template2.docx")
+
+
+IS_INSTALLER = getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
+if IS_INSTALLER:
+    template_path = sys._MEIPASS + "./template/template.docx"
+    doc = DocxTemplate(template_path)
+else:
+    doc = DocxTemplate("./template/template.docx")
 # Save data
 
 
