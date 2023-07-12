@@ -71,6 +71,7 @@ def open_save_location():
 window = ttk.Window(themename="darkly")
 window.title("Awesome LabelMaker")
 window.geometry("600x400")
+window.iconbitmap("./labelmaker.ico")
 
 # Title
 title_label = ttk.Label(window, text="Awesome LabelMaker", font=("Calibri", 24))
